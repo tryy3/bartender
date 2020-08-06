@@ -1,0 +1,39 @@
+query FindAllRecipes {
+    recipes {
+        description
+        id
+        image
+        title
+        recipeIngredients {
+            id
+            measurementType
+            measurementValue
+            ingredient {
+                description
+                id
+                image
+                title
+            }
+        }
+    }
+}
+
+query FindRecipeWithID($id: String!) {
+    recipes(where: { id: { _eq: $id } }, limit: 1) {
+        description
+        id
+        image
+        title
+        recipeIngredients {
+            id
+            measurementType
+            measurementValue
+            ingredient {
+                description
+                image
+                id
+                title
+            }
+        }
+    }
+}
