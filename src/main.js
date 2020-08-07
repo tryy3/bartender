@@ -5,9 +5,12 @@ import VueRouter from "vue-router";
 import Cloudinary from "cloudinary-vue";
 import VueFormWizard from "vue-form-wizard";
 import VueEllipseProgress from "vue-ellipse-progress";
+import VueSelect from "vue-select";
+import VueToasted from "vue-toasted";
 
 // Import Vue css
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import "vue-select/dist/vue-select.css";
 
 // Internal Imports
 import routes from "./routes/";
@@ -24,9 +27,11 @@ library.add(faSearch, faCog);
 
 // Add components to Vue
 Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component("v-select", VueSelect);
 
 // Add vue plugins
 Vue.use(VueApollo);
+Vue.use(VueToasted);
 Vue.use(VueRouter);
 Vue.use(VueFormWizard);
 Vue.use(VueEllipseProgress);

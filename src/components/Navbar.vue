@@ -27,7 +27,7 @@
             </div>
 
             <div class="navbar-end">
-                <a class="navbar-item" href="/">
+                <a class="navbar-item" href="/settings">
                     <font-awesome-icon icon="cog" />
                 </a>
                 <a class="navbar-item" href="/">

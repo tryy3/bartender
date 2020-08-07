@@ -7,6 +7,7 @@ function resolve(dir) {
 module.exports = {
     plugins: [
         require.resolve("babel-plugin-import-graphql"),
+        require.resolve("babel-plugin-lodash"),
         [
             require.resolve("babel-plugin-module-resolver"),
             {
