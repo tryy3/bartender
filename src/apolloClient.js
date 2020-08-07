@@ -25,8 +25,6 @@ const client = new ApolloClient({
             if (networkError) console.log(`[Network error]: ${networkError}`);
         }),
         createUploadLink({
-            //uri: "https://recipe-maker-backend.tryy3.us/query"
-            //uri: "http://localhost:8090/query"
             uri: "https://recipe-maker-backend.herokuapp.com/v1/graphql"
         })
     ]),

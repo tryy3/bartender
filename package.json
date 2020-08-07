@@ -10,9 +10,6 @@
         "tauri:serve": "rm -rf ./node_modules/.cache/babel-loader && vue-cli-service tauri:serve"
     },
     "dependencies": {
-        "@auth0/auth0-spa-js": "^1.11.0",
-        "@authpack/sdk": "^0.8.18",
-        "@authpack/vue": "^0.3.14",
         "@fortawesome/fontawesome-svg-core": "^1.2.30",
         "@fortawesome/free-solid-svg-icons": "^5.14.0",
         "@fortawesome/vue-fontawesome": "^0.1.10",
@@ -24,7 +21,6 @@
         "apollo-link-error": "^1.1.13",
         "apollo-link-http": "^1.5.17",
         "apollo-upload-client": "^14.1.1",
-        "babel-plugin-graphql-tag": "^3.0.0",
         "babel-plugin-import-graphql": "^2.7.0",
         "babel-plugin-lodash": "^3.3.4",
         "babel-plugin-module-resolver": "^4.0.0",
@@ -37,18 +33,18 @@
         "vue-apollo": "^3.0.4",
         "vue-ellipse-progress": "^1.1.1",
         "vue-form-wizard": "^0.8.4",
-        "vue-router": "^3.3.4",
+        "vue-router": "^3.4.2",
         "vue-select": "^3.10.7",
         "vue-toasted": "^1.1.28"
     },
     "devDependencies": {
-        "@vue/cli-plugin-babel": "~4.4.0",
-        "@vue/cli-plugin-eslint": "~4.4.0",
-        "@vue/cli-service": "~4.4.0",
+        "@vue/cli-plugin-babel": "~4.4.6",
+        "@vue/cli-plugin-eslint": "~4.4.6",
+        "@vue/cli-service": "~4.4.6",
         "babel-eslint": "^10.1.0",
-        "eslint": "^6.7.2",
+        "eslint": "^7.6.0",
         "eslint-plugin-vue": "^6.2.2",
-        "vue-cli-plugin-tauri": "~0.10.0",
+        "vue-cli-plugin-tauri": "~0.11.1",
         "vue-template-compiler": "^2.6.11"
     },
     "eslintConfig": {

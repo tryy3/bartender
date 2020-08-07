@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <form-wizard @on-complete="onComplete">
+        <form-wizard @on-complete="onComplete" ref="form">
             <tab-content
                 title="Choose a Recipe"
                 :before-change="validateFirstStep"
@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import Step1 from "@/components/steps/Step1.vue";
-import Step2 from "@/components/steps/Step2.vue";
-import Step3 from "@/components/steps/Step3.vue";
+import Step1 from "@/pages/steps/Step1.vue";
+import Step2 from "@/pages/steps/Step2.vue";
+import Step3 from "@/pages/steps/Step3.vue";
 
 import { promisified } from "tauri/api/tauri";
 
@@ -115,7 +115,15 @@ export default {
                 payload
             })
                 .then(response => {
-                    console.log(response);
+                    this.$toasted.success(response.message, { duration: 3000 });
+
+                    // Reset all steps and values
+                    this.selectedRecipe = "";
+                    this.selectedVolume = "";
+                    this.firstStepError = "";
+                    this.secondStepError = "";
+                    this.running = false;
+                    this.$refs.form.reset();
                 })
                 .catch(error => {
                     // do something with the Err() response string
@@ -151,7 +159,6 @@ export default {
         },
         secondStepSelection(v) {
             this.selectedVolume = v;
-            console.log(v);
         }
     }
 };

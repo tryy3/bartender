@@ -4,56 +4,10 @@
 )]
 
 use std::error::Error;
-use serde::{Deserialize, Serialize};
-use serde_json::json;
-use std::fs::File;
-use std::io::BufReader;
-use std::path::Path;
+use serde::{Serialize};
 
 mod cmd;
-
-#[derive(Debug, Deserialize, Serialize)]
-struct Pump {
-    id: String,
-    ingredient_id: String,
-    gpio: u64
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-struct Settings {
-    pumps: Vec<Pump>
-}
-
-#[derive(Debug, Deserialize)]
-struct RecipePump {
-    id: String,
-    volume: u64,
-}
-#[derive(Debug, Deserialize)]
-struct PourDrinkPayload {
-    pumps: Vec<RecipePump>,
-}
-
-// The commands definitions
-// Deserialized from JS
-#[derive(Debug, Deserialize)]
-#[serde(tag = "cmd", rename_all = "camelCase")]
-enum Cmd {
-    PourDrink {
-        payload: PourDrinkPayload,
-        callback: String,
-        error: String,
-    },
-    LoadSettings {
-        callback: String,
-        error: String,
-    },
-    SaveSettings {
-        payload: Settings,
-        callback: String,
-        error: String,
-    },
-}
+mod config;
 
 #[derive(Debug, Serialize)]
 struct SimpleResponse<'a> {
@@ -83,79 +37,10 @@ impl<'a> std::fmt::Display for CommandError<'a> {
 // and the function call should call `.into()` on it
 impl<'a> std::error::Error for CommandError<'a> {}
 
-fn read_config() -> Result<Settings, Box<dyn Error>> {
-    let config_path = Path::new("config.json");
-    let display = config_path.display();
-
-    if !config_path.exists() {
-        let new_config = match File::create(&config_path) {
-            Err(why) => panic!("Couldn't create {}: {}", display, why),
-            Ok(file) => file,
-        };
-
-        let default_settings = json!({
-            "pumps": [
-                {
-                    "id": "1",
-                    "ingredient_id": "",
-                    "gpio": 0,
-                },
-                {
-                    "id": "2",
-                    "ingredient_id": "",
-                    "gpio": 1,
-                },
-                {
-                    "id": "3",
-                    "ingredient_id": "",
-                    "gpio": 2,
-                }
-            ]
-        });
-
-        match serde_json::to_writer_pretty(new_config, &default_settings) {
-            Err(why) => panic!("couldn't write to {}: {}", display, why),
-            Ok(_) => println!("successfuly written default config to {}", display),
-        }
-    }
-
-    // Open the path in read-only mode, returns `io::Result<File>`
-    let file = match File::open(config_path) {
-        Err(why) => panic!("couldn't open {}: {}", display, why),
-        Ok(file) => file,
-    };
-
-    let reader = BufReader::new(file);
-
-    let config = match serde_json::from_reader(reader) {
-        Err(why) => panic!("couldn't read file {}: {}", display, why),
-        Ok(data) => data,
-    };
-
-    Ok(config)
-}
-
-fn save_config(settings: Settings) -> Result<(), Box<dyn Error>> {
-    let path = Path::new("config.json");
-    let display = path.display();
-
-    let config = match File::create(&path) {
-        Err(why) => panic!("Couldn't create {}: {}", display, why),
-        Ok(file) => file,
-    };
-
-    match serde_json::to_writer_pretty(config, &settings) {
-        Err(why) => panic!("couldn't write to {}: {}", display, why),
-        Ok(_) => println!("successfuly written default config to {}", display),
-    }
-
-    Ok(())
-}
-
 fn main() -> Result<(), Box<dyn Error>> {
     tauri::AppBuilder::new()
         .invoke_handler(|_webview, arg| {
-            use Cmd::*;
+            use cmd::cmd::Cmd::*;
             match serde_json::from_str(arg) {
                 Err(e) => Err(e.to_string()),
                 Ok(command) => {
@@ -175,7 +60,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                         LoadSettings { callback, error } => tauri::execute_promise(
                             _webview, 
                             move || {
-                                match read_config() {
+                                match config::config::read_config() {
                                     Err(why) => {
                                         println!("Unable to load config: {}", why);
                                         Err(CommandError::new("Unable to load config").into())
@@ -189,7 +74,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                         SaveSettings { payload, callback, error } => tauri::execute_promise(
                             _webview, 
                             move || {
-                                match save_config(payload) {
+                                match config::config::save_config(payload) {
                                     Err(why) =>{
                                         println!("unable to save config: {}", why);
                                         Err(CommandError::new("Unable to save config").into())

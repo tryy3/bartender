@@ -130,6 +130,7 @@ export default {
             return Math.floor(this.timeLeft / 60);
         },
         progress() {
+            if (this.time <= 0) return 0;
             return Math.floor(((this.time + 1) / this.startTime) * 100);
         }
     },
