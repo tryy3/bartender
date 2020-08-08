@@ -11,23 +11,22 @@ It will also contain the backend to control all pumps and such.
 
 This project is also depended on my other project Recipe Maker.
 I wanted to keep Recipe Maker as a seperate project due to Recipe Maker is more a general project which I have other plans for.
-So this project _recipe-maker-machine_ will only contain code/information regarding the actual machine. Management of recipes will be done through Recipe Maker.
+So this project will only contain code/information regarding the actual machine. Management of recipes will be done through Recipe Maker.
 
 ## TODO
 
-[ ] - Clean up code, remove old components, proper naming, there is probably some bad code too
-[ ] - Documentation
-[x] - Find a better name, probably better to seperate this from recipe-maker project.
-[ ] - Add details to hardware
-
-## Features
+ - [ ] Clean up code, remove old components, proper naming, there is probably some bad code too
+ - [ ] Documentation of both the code and the machine/process
+ - [x] Find a better name, probably better to seperate this from recipe-maker project.
+ - [ ] Add details to hardware
+ - [ ] Hide/Show only recipes that the machine can produce (based on ingredients from pumps)
 
 ## Hardware
 
 _Needs updating_
 
--   LCD screen with touch
--   Raspberry Pi
+-   LCD screen with touch functionality
+-   Raspberry Pi/Alternatives
 -   10x Pumps
 -   Case
 
@@ -53,12 +52,12 @@ After Version 2 is completed and I feel happy with the base, I will add new feat
 ### Version 1
 
 -   GUI
-
     -   Recipes is filtered based on what liquid we can pump
     -   Select a recipe
     -   Select the volume of your glass/drink
     -   Start pouring
     -   Change what liquid/ingredient is in each pump
+    -   Caching of recipes. Mainly it should use graphql but in case of no internet or mobile data there should be cache.
 
 -   Machine
     -   Pump liquid from A to B
@@ -77,9 +76,14 @@ After Version 2 is completed and I feel happy with the base, I will add new feat
 ### Future
 
 -   GUI
-
     -   Filter/Search pumps
     -   Stats
+        - Usage per recipe/ingredient/total
+        - Volume poured per recipe/ingredient/total
+        - Total bandwidth - Cache/Non cache
+        - Viewed per recipe/ingredient/total
+        - How many times each pump has changed ingredient
+        - Pump usage volume and times
 
 -   Machine
     -   RGB Everywhere
@@ -96,3 +100,5 @@ After Version 2 is completed and I feel happy with the base, I will add new feat
         -   Detect glass size, so we don't pour too much by accident
         -   Detect volume of the liquid, so we can show a percentage for each pump and warn when it's low
         -   Detect different liquid, scan bottles with QR or similar. Maybe RFID tag
+
+ - Updater
