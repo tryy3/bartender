@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <form-wizard @on-complete="onComplete" ref="form">
+        <form-wizard @on-complete="onComplete" ref="form" title="" subtitle="">
             <tab-content
                 title="Choose a Recipe"
                 :before-change="validateFirstStep"
@@ -177,5 +177,11 @@ export default {
     margin-bottom: 15px;
     text-align: left;
     display: inline-block;
+}
+</style>
+
+<style>
+.vue-form-wizard .wizard-header {
+    padding: 0;
 }
 </style>

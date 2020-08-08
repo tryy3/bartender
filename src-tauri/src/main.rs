@@ -5,6 +5,7 @@
 
 use std::error::Error;
 use serde::{Serialize};
+use std::{thread, time};
 
 mod cmd;
 mod config;
@@ -48,11 +49,12 @@ fn main() -> Result<(), Box<dyn Error>> {
                         PourDrink { payload, callback, error } => tauri::execute_promise(
                             _webview,
                             move || {
+                                thread::sleep(time::Duration::from_millis(5000));
                                 println!("{:?}", payload);
-                                    let response = SimpleResponse {
-                                        message: "async response!",
-                                    };
-                                    Ok(response)
+                                let response = SimpleResponse {
+                                    message: "Finished",
+                                };
+                                Ok(response)
                             },
                             callback,
                             error,
