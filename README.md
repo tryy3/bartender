@@ -1,6 +1,6 @@
-# recipe-maker-machine
+# Bartender
 
-This project is a bartender/drinking machine.
+This project is a bartender machine.
 
 The idea behind is that you will be able to select a drink from several different recipes and then it will mix it togheter and pour it into a glass.
 
@@ -17,7 +17,7 @@ So this project _recipe-maker-machine_ will only contain code/information regard
 
 [ ] - Clean up code, remove old components, proper naming, there is probably some bad code too
 [ ] - Documentation
-[ ] - Find a better name, probably better to seperate this from recipe-maker project.
+[x] - Find a better name, probably better to seperate this from recipe-maker project.
 [ ] - Add details to hardware
 
 ## Features
