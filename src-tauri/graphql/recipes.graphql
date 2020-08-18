@@ -1,0 +1,15 @@
+query RecipesQuery { 
+  recipes {
+    description
+    id
+    image
+    title
+    recipeIngredients {
+      id
+      ingredientId
+      measurementType
+      measurementValue
+      recipeId
+    }
+  }
+}

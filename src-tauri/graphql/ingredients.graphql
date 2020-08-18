@@ -1,0 +1,8 @@
+query IngredientsQuery {
+    ingredients {
+        id
+        description
+        image
+        title
+    }
+}
