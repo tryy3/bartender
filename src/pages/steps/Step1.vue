@@ -13,6 +13,7 @@
                                 recipe.image || '/samples/animals/cat.jpg'
                             "
                             secure="true"
+                            width="100%"
                         >
                             <cld-transformation
                                 width="206"

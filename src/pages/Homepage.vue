@@ -29,7 +29,10 @@
                     :volume="selectedVolume"
                     :running="running"
                 />
-            </tab-content>
+            </tab-content>                
+            <button class="wizard-button" type="primary" slot="prev">Previous</button>
+            <button class="wizard-button" type="primary" slot="finish">Finish</button>
+            <button class="wizard-button" :disabled="!isCurrentStepCompleted" type="primary" slot="next">Next</button>
         </form-wizard>
     </div>
 </template>
@@ -41,22 +44,22 @@ import Step3 from "@/pages/steps/Step3.vue";
 
 import { promisified } from "tauri/api/tauri";
 
-import gql from "graphql-tag";
-
 export default {
     name: "Homepage",
     components: {
         Step1,
         Step2,
-        Step3
+        Step3,
     },
     data() {
         return {
-            selectedRecipe: "yARypNrS",
-            selectedVolume: "100",
+            selectedRecipe: "",
+            selectedVolume: "",
             firstStepError: "",
             secondStepError: "",
-            running: false
+            running: false,
+            loading: false,
+            recipes: [],
         };
     },
     computed: {
@@ -75,27 +78,37 @@ export default {
 
             if (typeof recipe == "undefined") return defaultRecipe;
             return recipe;
-        }
-    },
-    apollo: {
-        recipes: gql`
-            query {
-                recipes {
-                    description
-                    id
-                    image
-                    title
-                    recipeIngredients {
-                        id
-                        ingredientId
-                        measurementType
-                        measurementValue
-                    }
-                }
+        },
+        isCurrentStepCompleted() {
+            let index = 0;
+            if (typeof this.$refs.form == "undefined") index = 0;
+            else if (typeof this.$refs.form.activeTabIndex == "undefined") index = 0;
+            else index = this.$refs.form.activeTabIndex;
+
+            if (index == 0) {
+                return this.selectedRecipe != "" && this.firstStepError == "";
+            } else if (index == 1) {
+                return this.selectedVolume != "" && this.secondStepError == "";
             }
-        `
+            return false
+        },
+    },
+    created() {
+        this.loadRecipes();
     },
     methods: {
+        loadRecipes() {
+            this.loading = true;
+            promisified({
+                cmd: "getRecipes"
+            }).then(resp => {
+                this.loading = false;
+                this.recipes = resp;
+            }).catch(err => {
+                this.loading = false;
+                this.$toasted.error(err, { duration: 3000 });
+            })
+        },
         onComplete: function() {
             this.running = true;
             let payload = {
@@ -178,10 +191,46 @@ export default {
     text-align: left;
     display: inline-block;
 }
+
+.wizard-button {
+    border: 4px double rgb(231, 76, 60);
+    border-radius: 60px;
+    color: #fff;
+    background: rgb(231, 76, 60);
+    transition: background-color 0.35s ease;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 10px 15px;
+    display: inline-block;
+    margin: 15px 30px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    outline: none;
+    position: relative;
+}
+
+.wizard-button:disabled, .wizard-button:disabled:hover {
+    background: #adb5bd;
+    border-color: #adb5bd;
+    color: #495057;
+    cursor: default;
+}
+
+.wizard-button:hover {
+    background: transparent;
+    color: rgba(231, 76, 60);
+}
+
+.wizard-button:focus,.wizard-button:active {
+    outline: 0;
+}
 </style>
 
 <style>
 .vue-form-wizard .wizard-header {
     padding: 0;
+}
+div[role=tab]:focus, span[role=button]:focus {
+    outline: 0;
 }
 </style>

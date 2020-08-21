@@ -5,7 +5,7 @@
                 <h1>Settings</h1>
             </div>
             <div class="body">
-                <template v-if="loading || $apollo.loading">
+                <template v-if="loading">
                     Loading data...
                 </template>
                 <template v-else>
@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import gql from "graphql-tag";
 import { promisified } from "tauri/api/tauri";
 import Pump from "@/components/Pump.vue";
 import { cloneDeep } from "lodash";
@@ -33,7 +32,8 @@ export default {
     data() {
         return {
             loading: false,
-            settings: {}
+            settings: {},
+            ingredients: {},
         };
     },
     computed: {
@@ -45,6 +45,7 @@ export default {
     },
     created() {
         this.loadSettings();
+        this.loadIngredients();
     },
     methods: {
         loadSettings() {
@@ -73,21 +74,19 @@ export default {
                 .catch(err => {
                     this.$toasted.error(err, { duration: 3000 });
                 });
-        }
-    },
-    apollo: {
-        ingredients: {
-            query: gql`
-                query {
-                    ingredients {
-                        description
-                        image
-                        id
-                        title
-                    }
-                }
-            `
-        }
+        },
+        loadIngredients() {
+            this.loading = true;
+            promisified({
+                cmd: "getIngredients"
+            }).then(resp => {
+                this.loading = false;
+                this.ingredients = resp;
+            }).catch(err => {
+                this.loading = false;
+                this.$toasted.error(err, { duration: 3000 });
+            })
+        },
     }
 };
 </script>

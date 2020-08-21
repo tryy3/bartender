@@ -1,6 +1,5 @@
 // Import Vue related imports
 import Vue from "vue";
-import VueApollo from "vue-apollo";
 import VueRouter from "vue-router";
 import Cloudinary from "cloudinary-vue";
 import VueFormWizard from "vue-form-wizard";
@@ -14,7 +13,6 @@ import "vue-select/dist/vue-select.css";
 
 // Internal Imports
 import routes from "./routes/";
-import apolloClient from "./apolloClient";
 
 // Modules and App
 import App from "./App.vue";
@@ -30,7 +28,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("v-select", VueSelect);
 
 // Add vue plugins
-Vue.use(VueApollo);
 Vue.use(VueToasted);
 Vue.use(VueRouter);
 Vue.use(VueFormWizard);
@@ -39,11 +36,6 @@ Vue.use(Cloudinary, {
     configuration: {
         cloudName: "ddsiiisuy"
     }
-});
-
-// Create and initialize apollo
-const apolloProvider = new VueApollo({
-    defaultClient: apolloClient
 });
 
 // Initialize the router
@@ -56,7 +48,6 @@ const router = new VueRouter({
 Vue.config.productionTip = false;
 
 new Vue({
-    apolloProvider,
     router,
     render: h => h(App)
 }).$mount("#app");
